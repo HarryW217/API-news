@@ -11,8 +11,8 @@ app.get("/api", getEndPoints);
 app.get("/api/articles", getArticles);
 
 app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).send({ msg: err.message });
+  if (err.status = 404) {
+    res.status(err.status).send({ msg: "404 not found!"});
   }
   next(err);
 });

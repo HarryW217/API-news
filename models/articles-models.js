@@ -17,27 +17,26 @@ exports.fetchArticleById = (article_id) => {
 };
 
 exports.fetchArticles = () => {
-  /*
-    comment_count, which is the total count 
-    of all the comments with this article_id.
-     You should make use of queries to the database 
-     in order to achieve this.
-    */
-    
-    
-
   return db
     .query(
       `
-    SELECT articles.article_id, title, topic, articles.author, articles.created_at, articles.votes, article_img_url FROM articles
-    JOIN comments
-    ON articles.article_id = comments.article_id
-    ORDER BY articles.created_at DESC
-    ;`
+    SELECT COUNT(comments.article_id)::INT AS comment_count , 
+    articles.author, title, articles.article_id, topic,
+    articles.created_at, articles.votes, article_img_url FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.article_id
+    ORDER BY articles.created_at DESC;
+    `
     )
     .then((result) => {
-      const array = result.rows;
-      console.log(result.rows);
-      return array;
+      if (result.rows.length > 0) {
+        const array = result.rows;
+        return array;
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: "Articles not found!",
+        });
+      }
     });
 };

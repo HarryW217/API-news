@@ -42,7 +42,7 @@ describe("GET /api", () => {
   });
 });
 
-xdescribe("GET /api/articles", () => {
+describe("GET /api/articles", () => {
   test("GET:200 responds with an array of article objects in descending date order", () => {
     return request(app)
       .get("/api/articles")
@@ -63,4 +63,9 @@ xdescribe("GET /api/articles", () => {
         });
       });
   });
+  test("GET:404 returns error message when article does not exist", () => {
+    return request(app)
+      .get("/api/notARoute")
+      .expect(404)
+  })
 });
