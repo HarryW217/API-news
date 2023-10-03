@@ -3,6 +3,7 @@ const app = express();
 const { getTopics } = require("./controllers/topics-controllers");
 const { getEndPoints } = require("./controllers/api-controllers");
 const { getArticles } = require("./controllers/articles-controllers");
+const { getArticleById } = require("./controllers/articles-controllers");
 
 app.get("/api/topics", getTopics);
 
@@ -10,9 +11,21 @@ app.get("/api", getEndPoints);
 
 app.get("/api/articles", getArticles);
 
+app.get("/api/articles/:article_id", getArticleById);
+
+
+
 app.use((err, req, res, next) => {
-  if (err.status = 404) {
-    res.status(err.status).send({ msg: "404 not found!"});
+  if (err.code === "22P02") {
+    res.status(400).send({ msg: "Invalid input" })
+  }
+  res.status(err.status).send({ msg: err.msg });
+  next(err);
+});
+
+app.use((err, req, res, next) => {
+  if ((err.status = 404)) {
+    res.status(err.status).send({ msg: "404 not found!" });
   }
   next(err);
 });
