@@ -2,10 +2,13 @@ const express = require("express");
 const app = express();
 const { getTopics } = require("./controllers/topics-controllers");
 const { getEndPoints } = require("./controllers/api-controllers");
+const { getArticles } = require("./controllers/articles-controllers");
 
 app.get("/api/topics", getTopics);
 
 app.get("/api", getEndPoints);
+
+app.get("/api/articles", getArticles);
 
 app.use((err, req, res, next) => {
   if (err.status) {
@@ -15,8 +18,8 @@ app.use((err, req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-    res.status(500).send({ msg: "internal server error" });
-    console.log(err);
+  res.status(500).send({ msg: "internal server error" });
+  console.log(err);
 });
 
 module.exports = app;
