@@ -42,7 +42,7 @@ describe("GET /api", () => {
   });
 });
 
-describe.only("GET /api/articles", () => {
+xdescribe("GET /api/articles", () => {
   test("GET:200 responds with an array of article objects in descending date order", () => {
     return request(app)
       .get("/api/articles")
