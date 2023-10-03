@@ -30,7 +30,9 @@
   },
   "dependencies": {
     "dotenv": "^16.0.0",
-    "pg": "^8.7.3"
+    "fs": "^0.0.1-security",
+    "pg": "^8.7.3",
+    "promises": "^0.2.5"
   },
   "jest": {
     "setupFilesAfterEnv": [
