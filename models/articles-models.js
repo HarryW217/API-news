@@ -29,14 +29,7 @@ exports.fetchArticles = () => {
     `
     )
     .then((result) => {
-      if (result.rows.length > 0) {
-        const articlesArr = result.rows;
-        return articlesArr;
-      } else {
-        return Promise.reject({
-          status: 404,
-          msg: "Articles not found!",
-        });
-      }
+      const articlesArr = result.rows;
+      return articlesArr;
     });
 };

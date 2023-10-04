@@ -97,6 +97,7 @@ describe("GET /api/articles", () => {
       .then((response) => {
         const articlesArr = response.body;
         expect(Array.isArray(articlesArr)).toBe(true);
+        expect(articlesArr.length).toBe(13)
         articlesArr.forEach((article) => {
           expect(typeof article.author).toBe("string");
           expect(typeof article.title).toBe("string");
@@ -115,7 +116,6 @@ describe("GET /api/articles", () => {
       .get("/api/notARoute")
       .expect(404)
       .then((response) => {
-        console.log(response.body)
         expect(response.body.msg).toBe("Path not found")
     })
   });
