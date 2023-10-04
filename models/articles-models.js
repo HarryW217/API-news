@@ -32,14 +32,31 @@ exports.fetchArticleCommentsById = (article_id) => {
     )
     .then((result) => {
       if (result.rows.length > 0) {
-          const commentsArr = result.rows;
-      return commentsArr;
+        const commentsArr = result.rows;
+        return commentsArr;
       } else {
-          return Promise.reject({
-            status: 404,
-            msg: "Article comments not found!",
-          });
+        return Promise.reject({
+          status: 404,
+          msg: "Article comments not found!",
+        });
       }
-    
+    });
+};
+
+exports.fetchArticles = () => {
+  return db
+    .query(
+      `
+    SELECT COUNT(comments.article_id)::INT AS comment_count , 
+    articles.author, title, articles.article_id, topic,
+    articles.created_at, articles.votes, article_img_url FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.article_id
+    ORDER BY articles.created_at DESC;
+    `
+    )
+    .then((result) => {
+      const articlesArr = result.rows;
+      return articlesArr;
     });
 };

@@ -3,7 +3,7 @@ const request = require("supertest");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const data = require("../db/data/test-data/index");
-const endPointsFile = require("../db/endpoints.json")
+const endPointsFile = require("../db/endpoints.json");
 
 beforeEach(() => {
   return seed(data);
@@ -89,6 +89,38 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("GET:200 responds with an array of article objects in descending date order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articlesArr = response.body;
+        expect(Array.isArray(articlesArr)).toBe(true);
+        expect(articlesArr.length).toBe(13);
+        articlesArr.forEach((article) => {
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("number");
+          expect(article.hasOwnProperty("body")).toBe(false);
+        });
+      });
+  });
+  test("GET:404 returns error message when given an invalid path", () => {
+    return request(app)
+      .get("/api/notARoute")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Path not found");
+      });
+  });
+});
+
 describe("GET /api/articles/:article_id/comments", () => {
   test("GET:200 responds with an array of comment objects for the given article_id in descending date order", () => {
     return request(app)
@@ -114,7 +146,7 @@ describe("GET /api/articles/:article_id/comments", () => {
             votes: 0,
           },
         ];
-        expect(commentsArr).toEqual(desiredArr)
+        expect(commentsArr).toEqual(desiredArr);
         commentsArr.forEach((comment) => {
           expect(comment.article_id).toBe(3);
           expect(typeof comment.comment_id).toBe("number");
@@ -133,12 +165,12 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(response.body.msg).toBe("Article comments not found!");
       });
   });
-   test("GET:400 returns error message when bad request (invalid ID) is made", () => {
-     return request(app)
-       .get("/api/articles/notAnId/comments")
-       .expect(400)
-       .then((response) => {
-         expect(response.body.msg).toBe("Invalid input");
-       });
-   });
+  test("GET:400 returns error message when bad request (invalid ID) is made", () => {
+    return request(app)
+      .get("/api/articles/notAnId/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
 });
