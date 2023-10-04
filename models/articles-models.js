@@ -15,3 +15,21 @@ exports.fetchArticleById = (article_id) => {
       }
     });
 };
+
+exports.fetchArticles = () => {
+  return db
+    .query(
+      `
+    SELECT COUNT(comments.article_id)::INT AS comment_count , 
+    articles.author, title, articles.article_id, topic,
+    articles.created_at, articles.votes, article_img_url FROM articles
+    LEFT JOIN comments ON articles.article_id = comments.article_id
+    GROUP BY articles.article_id
+    ORDER BY articles.created_at DESC;
+    `
+    )
+    .then((result) => {
+      const articlesArr = result.rows;
+      return articlesArr;
+    });
+};

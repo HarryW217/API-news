@@ -58,8 +58,8 @@ describe("GET /api/articles/:article_id", () => {
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
         };
-        expect(article).toMatchObject(desiredArticle)
-        expect(article.article_id).toBe(3)
+        expect(article).toMatchObject(desiredArticle);
+        expect(article.article_id).toBe(3);
         expect(typeof article).toBe("object");
         expect(typeof article.author).toBe("string");
         expect(typeof article.title).toBe("string");
@@ -89,3 +89,34 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles", () => {
+  test("GET:200 responds with an array of article objects in descending date order", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articlesArr = response.body;
+        expect(Array.isArray(articlesArr)).toBe(true);
+        expect(articlesArr.length).toBe(13)
+        articlesArr.forEach((article) => {
+          expect(typeof article.author).toBe("string");
+          expect(typeof article.title).toBe("string");
+          expect(typeof article.article_id).toBe("number");
+          expect(typeof article.topic).toBe("string");
+          expect(typeof article.created_at).toBe("string");
+          expect(typeof article.votes).toBe("number");
+          expect(typeof article.article_img_url).toBe("string");
+          expect(typeof article.comment_count).toBe("number");
+          expect(article.hasOwnProperty("body")).toBe(false);
+        });
+      });
+  });
+  test("GET:404 returns error message when given an invalid path", () => {
+    return request(app)
+      .get("/api/notARoute")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Path not found")
+    })
+  });
+});
