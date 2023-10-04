@@ -110,7 +110,13 @@ describe("GET /api/articles", () => {
         });
       });
   });
-  test("GET:404 returns error message when article does not exist", () => {
-    return request(app).get("/api/notARoute").expect(404);
+  test("GET:404 returns error message when given an invalid path", () => {
+    return request(app)
+      .get("/api/notARoute")
+      .expect(404)
+      .then((response) => {
+        console.log(response.body)
+        expect(response.body.msg).toBe("Path not found")
+    })
   });
 });

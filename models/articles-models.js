@@ -30,8 +30,8 @@ exports.fetchArticles = () => {
     )
     .then((result) => {
       if (result.rows.length > 0) {
-        const array = result.rows;
-        return array;
+        const articlesArr = result.rows;
+        return articlesArr;
       } else {
         return Promise.reject({
           status: 404,
