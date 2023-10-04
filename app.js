@@ -5,7 +5,8 @@ const { getEndPoints } = require("./controllers/api-controllers");
 const {
   getArticles,
   getArticleById,
-  postComment
+  getArticleCommentsById,
+  postComment,
 } = require("./controllers/articles-controllers");
 
 app.use(express.json())
@@ -18,6 +19,9 @@ app.get("/api", getEndPoints);
 app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
+
+app.get("/api/articles/:article_id/comments", getArticleCommentsById);
+
 
 //POST requests
 app.post("/api/articles/:article_id/comments", postComment);
