@@ -58,8 +58,8 @@ describe("GET /api/articles/:article_id", () => {
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
         };
-        expect(article).toMatchObject(desiredArticle)
-        expect(article.article_id).toBe(3)
+        expect(article).toMatchObject(desiredArticle);
+        expect(article.article_id).toBe(3);
         expect(typeof article).toBe("object");
         expect(typeof article.author).toBe("string");
         expect(typeof article.title).toBe("string");
@@ -89,3 +89,57 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
+describe("GET /api/articles/:article_id/comments", () => {
+  test("GET:200 responds with an array of comment objects for the given article_id in descending date order", () => {
+    return request(app)
+      .get("/api/articles/3/comments")
+      .expect(200)
+      .then((response) => {
+        const commentsArr = response.body;
+        console.log(response.body)
+        const desiredArr = [
+          {
+            article_id: 3,
+            author: "icellusedkars",
+            body: "Ambidextrous marsupial",
+            comment_id: 11,
+            created_at: "2020-09-19T23:10:00.000Z",
+            votes: 0,
+          },
+          {
+            article_id: 3,
+            author: "icellusedkars",
+            body: "git push origin master",
+            comment_id: 10,
+            created_at: "2020-06-20T07:24:00.000Z",
+            votes: 0,
+          },
+        ];
+        expect(commentsArr).toEqual(desiredArr)
+        commentsArr.forEach((comment) => {
+          expect(comment.article_id).toBe(3);
+          expect(typeof comment.comment_id).toBe("number");
+          expect(typeof comment.votes).toBe("number");
+          expect(typeof comment.body).toBe("string");
+          expect(typeof comment.author).toBe("string");
+          expect(typeof comment.created_at).toBe("string");
+        });
+      });
+  });
+  test("GET:404 returns error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles/99999/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article comments not found!");
+      });
+  });
+   test("GET:400 returns error message when bad request (invalid ID) is made", () => {
+     return request(app)
+       .get("/api/articles/notAnId/comments")
+       .expect(400)
+       .then((response) => {
+         expect(response.body.msg).toBe("Invalid input");
+       });
+   });
+});
