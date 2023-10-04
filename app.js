@@ -2,9 +2,15 @@ const express = require("express");
 const app = express();
 const { getTopics } = require("./controllers/topics-controllers");
 const { getEndPoints } = require("./controllers/api-controllers");
-const { getArticles } = require("./controllers/articles-controllers");
-const { getArticleById } = require("./controllers/articles-controllers");
+const {
+  getArticles,
+  getArticleById,
+  postComment
+} = require("./controllers/articles-controllers");
 
+app.use(express.json())
+
+//GET requests
 app.get("/api/topics", getTopics);
 
 app.get("/api", getEndPoints);
@@ -13,17 +19,27 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id", getArticleById);
 
+//POST requests
+app.post("/api/articles/:article_id/comments", postComment);
+
 //Handle 404 errors
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Path not found" });
 });
 
 //Handle custom errors
+
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ msg: "Invalid input" });
   }
-  res.status(err.status).send({ msg: err.msg });
+  if (err.code === "23502") {
+    res.status(400).send({ msg: "Missing required fields" });
+  }
+  if (err.code === "23503") {
+    res.status(400).send({ msg: "Invalid input" });
+  }
+    res.status(err.status).send({ msg: err.msg });
   next(err);
 });
 
