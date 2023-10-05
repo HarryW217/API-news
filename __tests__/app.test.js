@@ -168,6 +168,32 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(response.body.msg).toBe("Invalid input");
       });
   });
+  test("POST:400 responds with error message when article id does not exist", () => {
+     const newComment = {
+       username: "icellusedkars",
+       body: "Hello world",
+     };
+     return request(app)
+       .post("/api/articles/99999/comments")
+       .send(newComment)
+       .expect(400)
+       .then((response) => {
+          expect(response.body.msg).toBe("Invalid input")
+       });
+  })
+  test("POST:400 responds with error message when article id is invalid", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Hello world",
+    };
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
 });
 
 describe("GET /api/articles/:article_id/comments", () => {
