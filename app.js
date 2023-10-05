@@ -6,10 +6,11 @@ const {
   getArticles,
   getArticleById,
   getArticleCommentsById,
+  patchArticlesById,
   postComment,
 } = require("./controllers/articles-controllers");
 
-app.use(express.json())
+app.use(express.json());
 
 //GET requests
 app.get("/api/topics", getTopics);
@@ -22,9 +23,11 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getArticleCommentsById);
 
-
 //POST requests
 app.post("/api/articles/:article_id/comments", postComment);
+
+//PATCH requests
+app.patch("/api/articles/:article_id", patchArticlesById);
 
 //Handle 404 errors
 app.all("/*", (req, res) => {
@@ -43,7 +46,7 @@ app.use((err, req, res, next) => {
   if (err.code === "23503") {
     res.status(400).send({ msg: "Invalid input" });
   }
-    res.status(err.status).send({ msg: err.msg });
+  res.status(err.status).send({ msg: err.msg });
   next(err);
 });
 

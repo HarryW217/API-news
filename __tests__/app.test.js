@@ -249,3 +249,85 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("PATCH:200 updates an article's vote property with a positive integer by article id, responding with the updated article", () => {
+    const articleUpdatePositiveInt = { inc_votes: 1 };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(articleUpdatePositiveInt)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toMatchObject({
+          title: "Eight pug gifs that remind me of mitch",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "some gifs",
+          created_at: "2020-11-03T09:12:00.000Z",
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("PATCH:200 updates an article's vote property with a negative integer by article id, responding with the updated article", () => {
+    const articleUpdateNegativeInt = { inc_votes: -5 };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(articleUpdateNegativeInt)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toMatchObject({
+          title: "Eight pug gifs that remind me of mitch",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "some gifs",
+          created_at: "2020-11-03T09:12:00.000Z",
+          votes: -5,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("PATCH:400 returns error message when bad request (invalid ID) is made", () => {
+     const articleUpdate = { inc_votes: -5 };
+     return request(app)
+       .patch("/api/articles/notAnId")
+       .send(articleUpdate)
+       .expect(400)
+       .then((response) => {
+         expect(response.body.msg).toBe("Invalid input");
+       });
+  });
+   test("PATCH:404 returns error message when article does not exist", () => {
+     const articleUpdate = { inc_votes: -5 };
+     return request(app)
+       .patch("/api/articles/99999")
+       .send(articleUpdate)
+       .expect(404)
+       .then((response) => {
+         expect(response.body.msg).toBe("Article not found!");
+       });
+   });
+  test("PATCH:400 returns error message when request body is missing required fields", () => {
+    const articleUpdate = { inc_votes: "Hello" };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(articleUpdate)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
+  test("PATCH:400 returns error message when request body contains invalid data type", () => {
+    const articleUpdate = { };
+    return request(app)
+      .patch("/api/articles/3")
+      .send(articleUpdate)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Missing required fields");
+      });
+  });
+});
