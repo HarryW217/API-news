@@ -169,18 +169,18 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("POST:400 responds with error message when article id does not exist", () => {
-     const newComment = {
-       username: "icellusedkars",
-       body: "Hello world",
-     };
-     return request(app)
-       .post("/api/articles/99999/comments")
-       .send(newComment)
-       .expect(400)
-       .then((response) => {
-          expect(response.body.msg).toBe("Invalid input")
-       });
-  })
+    const newComment = {
+      username: "icellusedkars",
+      body: "Hello world",
+    };
+    return request(app)
+      .post("/api/articles/99999/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
   test("POST:400 responds with error message when article id is invalid", () => {
     const newComment = {
       username: "icellusedkars",
@@ -250,6 +250,28 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("DELETE /api/comments/:comment_id", () => {
+  test("DELETE:204 deletes a comment by comment id and responds with a status 204 with no content", () => {
+    return request(app).delete("/api/comments/3").expect(204);
+  });
+  test("DELETE:404 returns an error when resource for deletion does not exist", () => {
+    return request(app)
+      .delete("/api/comments/999999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Comment does not exist");
+      });
+  });
+  test("DELETE:400 returns an error when bad request (invalid id) is made", () => {
+    return request(app)
+      .delete("/api/comments/apples")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
+});
+
 describe("PATCH /api/articles/:article_id", () => {
   test("PATCH:200 updates an article's vote property with a positive integer by article id, responding with the updated article", () => {
     const articleUpdatePositiveInt = { inc_votes: 1 };
@@ -291,25 +313,25 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("PATCH:400 returns error message when bad request (invalid ID) is made", () => {
-     const articleUpdate = { inc_votes: -5 };
-     return request(app)
-       .patch("/api/articles/notAnId")
-       .send(articleUpdate)
-       .expect(400)
-       .then((response) => {
-         expect(response.body.msg).toBe("Invalid input");
-       });
+    const articleUpdate = { inc_votes: -5 };
+    return request(app)
+      .patch("/api/articles/notAnId")
+      .send(articleUpdate)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
   });
-   test("PATCH:404 returns error message when article does not exist", () => {
-     const articleUpdate = { inc_votes: -5 };
-     return request(app)
-       .patch("/api/articles/99999")
-       .send(articleUpdate)
-       .expect(404)
-       .then((response) => {
-         expect(response.body.msg).toBe("Article not found!");
-       });
-   });
+  test("PATCH:404 returns error message when article does not exist", () => {
+    const articleUpdate = { inc_votes: -5 };
+    return request(app)
+      .patch("/api/articles/99999")
+      .send(articleUpdate)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found!");
+      });
+  });
   test("PATCH:400 returns error message when request body is missing required fields", () => {
     const articleUpdate = { inc_votes: "Hello" };
     return request(app)
@@ -321,7 +343,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("PATCH:400 returns error message when request body contains invalid data type", () => {
-    const articleUpdate = { };
+    const articleUpdate = {};
     return request(app)
       .patch("/api/articles/3")
       .send(articleUpdate)

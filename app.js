@@ -10,6 +10,8 @@ const {
   postComment,
 } = require("./controllers/articles-controllers");
 
+const { deleteComment } = require("./controllers/comments-controllers")
+
 app.use(express.json());
 
 //GET requests
@@ -25,6 +27,9 @@ app.get("/api/articles/:article_id/comments", getArticleCommentsById);
 
 //POST requests
 app.post("/api/articles/:article_id/comments", postComment);
+
+// DELETE requests
+app.delete("/api/comments/:comment_id", deleteComment);
 
 //PATCH requests
 app.patch("/api/articles/:article_id", patchArticlesById);
