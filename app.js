@@ -9,7 +9,9 @@ const {
   postComment,
 } = require("./controllers/articles-controllers");
 
-app.use(express.json())
+const { deleteComment } = require("./controllers/comments-controllers")
+
+app.use(express.json());
 
 //GET requests
 app.get("/api/topics", getTopics);
@@ -22,9 +24,11 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getArticleCommentsById);
 
-
 //POST requests
 app.post("/api/articles/:article_id/comments", postComment);
+
+// DELETE requests
+app.delete("/api/comments/:comment_id", deleteComment);
 
 //Handle 404 errors
 app.all("/*", (req, res) => {
@@ -43,7 +47,7 @@ app.use((err, req, res, next) => {
   if (err.code === "23503") {
     res.status(400).send({ msg: "Invalid input" });
   }
-    res.status(err.status).send({ msg: err.msg });
+  res.status(err.status).send({ msg: err.msg });
   next(err);
 });
 
