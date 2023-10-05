@@ -61,29 +61,26 @@ exports.fetchArticles = () => {
     });
 };
 
-// exports.alterArticleVotesById = (article_id, votesUpdate) => {
-  
-//   const originalVotes = db.query(`
-//     SELECT votes FROM articles
-//     WHERE article_id = $1;
-//   `).then((result) => {
-//     console.log(result)
-//   })
-
-//   const voteIncrement = 
-
-
-
-//   return db
-//     .query(
-//       `
-//       UPDATE articles
-//       SET votes = 5
-//       WHERE article_id = $1
-//       RETURNING *;
-//       `,
-//       [article_id]
-//   ).then((result) => {
-//     return result
-//     })
-// }
+exports.alterArticleVotesById = (article_id, votesUpdate) => {
+  return db
+    .query(
+      `
+      UPDATE articles
+      SET votes = articles.votes+$1
+      WHERE article_id = $2
+      RETURNING *;
+      `,
+      [votesUpdate, article_id]
+    )
+    .then((result) => {
+      if (result.rows.length > 0) {
+        const article = result.rows[0];
+        return article;
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: "Article not found!",
+        });
+      }
+    });
+};
