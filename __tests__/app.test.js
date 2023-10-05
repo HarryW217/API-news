@@ -174,3 +174,30 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+xdescribe("PATCH /api/articles/:article_id", () => {
+  test("PATCH:200 updates an article's vote property by article id, responding with the updated article", () => {
+    
+    const articleUpdatePositiveInt = { inc_votes: 1 };
+    // const articleUpdateNegativeInt = { inc_votes: -5 };
+
+    return request(app)
+      .patch("/api/articles/3")
+      .send(articleUpdatePositiveInt)
+      .expect(200)
+      .then((response) => {
+        const desiredArticleResponse = {
+          title: "Eight pug gifs that remind me of mitch",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "some gifs",
+          created_at: 1604394720000,
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        };
+        console.log(response.body)
+        expect(response.body).toMatchObject(desiredArticleResponse);
+      });
+  });
+});
