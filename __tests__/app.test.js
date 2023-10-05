@@ -121,6 +121,81 @@ describe("GET /api/articles", () => {
   });
 });
 
+describe("POST /api/articles/:article_id/comments", () => {
+  test("POST:201 inserts comment into the database and responds with the posted comment object", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Hello world",
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        const commentObj = response.body.comment;
+
+        expect(commentObj.author).toBe(newComment.username);
+        expect(commentObj.body).toBe(newComment.body);
+        expect(commentObj.article_id).toBe(3);
+
+        expect(typeof commentObj).toBe("object");
+        expect(typeof commentObj.comment_id).toBe("number");
+        expect(typeof commentObj.body).toBe("string");
+        expect(typeof commentObj.author).toBe("string");
+        expect(typeof commentObj.votes).toBe("number");
+        expect(typeof commentObj.created_at).toBe("string");
+      });
+  });
+  test("POST:400 responds with error message when body is missing required fields", () => {
+    const newComment = {};
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Missing required fields");
+      });
+  });
+  test("POST:400 responds with error message when body contains invalid properties", () => {
+    const newComment = {
+      username: ["username"],
+      body: 12345,
+    };
+    return request(app)
+      .post("/api/articles/3/comments")
+      .send(newComment)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
+  test("POST:400 responds with error message when article id does not exist", () => {
+     const newComment = {
+       username: "icellusedkars",
+       body: "Hello world",
+     };
+     return request(app)
+       .post("/api/articles/99999/comments")
+       .send(newComment)
+       .expect(400)
+       .then((response) => {
+          expect(response.body.msg).toBe("Invalid input")
+       });
+  })
+  test("POST:400 responds with error message when article id is invalid", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "Hello world",
+    };
+    return request(app)
+      .post("/api/articles/banana/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
+});
+
 describe("GET /api/articles/:article_id/comments", () => {
   test("GET:200 responds with an array of comment objects for the given article_id in descending date order", () => {
     return request(app)
