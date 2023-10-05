@@ -76,7 +76,31 @@ exports.insertComment = (article_id, username, body) => {
         const comment = result.rows[0];
         return comment;
       } else {
-         return Promise.reject({
+        return Promise.reject({
+          status: 404,
+          msg: "Article not found!",
+        });
+      }
+    });
+};
+
+exports.alterArticleVotesById = (article_id, votesUpdate) => {
+  return db
+    .query(
+      `
+      UPDATE articles
+      SET votes = articles.votes+$1
+      WHERE article_id = $2
+      RETURNING *;
+      `,
+      [votesUpdate, article_id]
+    )
+    .then((result) => {
+      if (result.rows.length > 0) {
+        const article = result.rows[0];
+        return article;
+      } else {
+        return Promise.reject({
           status: 404,
           msg: "Article not found!",
         });

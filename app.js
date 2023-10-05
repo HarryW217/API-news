@@ -6,6 +6,7 @@ const {
   getArticles,
   getArticleById,
   getArticleCommentsById,
+  patchArticlesById,
   postComment,
 } = require("./controllers/articles-controllers");
 
@@ -29,6 +30,9 @@ app.post("/api/articles/:article_id/comments", postComment);
 
 // DELETE requests
 app.delete("/api/comments/:comment_id", deleteComment);
+
+//PATCH requests
+app.patch("/api/articles/:article_id", patchArticlesById);
 
 //Handle 404 errors
 app.all("/*", (req, res) => {
