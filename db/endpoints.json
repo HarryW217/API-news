@@ -26,6 +26,18 @@
       ]
     }
   },
+  "GET /api/articles/:article_id": {
+    "desciption:": "serves a single article object by article_id",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "title": "Eight pug gifs that remind me of mitch",
+      "topic": "mitch",
+      "author": "icellusedkars",
+      "body": "some gifs",
+      "created_at": "2020-11-03T09:12:00.000Z",
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
+  },
   "GET /api/articles/:article_id/comments": {
     "description": "serves an array of comment objects from an article by article_id",
     "queries": [],
@@ -47,5 +59,30 @@
         "votes": 0
       }
     ]
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a comment to an article by article_id, serving the posted comment object",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "username": "icellusedkars",
+      "body": "Hello world"
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates article by article_id, serving the updated article object",
+    "queries": ["article_id"],
+    "exampleResponse": {
+      "title": "Eight pug gifs that remind me of mitch",
+      "topic": "mitch",
+      "author": "icellusedkars",
+      "body": "some gifs",
+      "created_at": "2020-11-03T09:12:00.000Z",
+      "votes": 1,
+      "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a comment by comment_id",
+    "queries": ["comment_id"]
   }
 }
