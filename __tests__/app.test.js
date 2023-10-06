@@ -354,7 +354,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("GET /api/articles?topic", () => {
+describe.only("GET /api/articles?topic", () => {
   test("GET:200 returns an array of article objects by the defined topic value", () => {
     return request(app)
       .get("/api/articles?topic=cats")
@@ -382,7 +382,8 @@ describe("GET /api/articles?topic", () => {
       .get("/api/articles?topic=paper")
       .expect(200)
       .then((response) => {
-      })
+        expect(response.body).toEqual([]);
+      });
   });
   test("GET:404 returns an error message when there are no articles of queried topic", () => {
     return request(app)
