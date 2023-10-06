@@ -59,13 +59,13 @@ exports.fetchArticles = (query) => {
      ORDER BY articles.created_at DESC;
     `;
     return db.query(finalQuery, [query.topic]).then((result) => {
-      if (result.rows.length > 0) {
+      if (result.rows) {
         const articlesByTopic = result.rows;
         return articlesByTopic;
       } else {
         return Promise.reject({
           status: 404,
-          msg: "No articles of this topic!"
+          msg: "No articles of this topic!",
         });
       }
     });

@@ -377,12 +377,19 @@ describe("GET /api/articles?topic", () => {
         expect(articles).toHaveLength(13);
       });
   });
+  test("GET:200 returns an empty array if queried topic exists but has no articles", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then((response) => {
+      })
+  });
   test("GET:404 returns an error message when there are no articles of queried topic", () => {
     return request(app)
-      .get("/api/articles?topic=John")
+      .get("/api/articles?topic=999")
       .expect(404)
       .then((response) => {
-        expect(response.body.msg).toBe("No articles of this topic!");
+        expect(response.body.msg).toBe("No articles found of this topic!");
       });
   });
 });
