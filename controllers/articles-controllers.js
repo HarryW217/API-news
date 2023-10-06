@@ -52,6 +52,7 @@ exports.postComment = (req, res, next) => {
     });
 };
 
+
 exports.patchArticlesById = (req, res, next) => {
   const articleId = req.params.article_id;
   const votesUpdate = req.body.inc_votes;
