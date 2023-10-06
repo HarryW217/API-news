@@ -29,7 +29,6 @@ exports.fetchArticleById = (article_id, query) => {
     .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
     .then((result) => {
       if (result.rows.length > 0) {
-        console.log(query, "in model");
         const obj = result.rows[0];
         return obj;
       } else {

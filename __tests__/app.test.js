@@ -375,7 +375,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id?comment_count", () => {
+describe("GET /api/articles/:article_id?comment_count", () => {
   test("GET:200 responds with an article object by article_id, now including a comment count property as requested by the query", () => {
     return request(app)
       .get("/api/articles/3?comment_count")

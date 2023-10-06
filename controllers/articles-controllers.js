@@ -8,7 +8,6 @@ const {
 
 exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
-  console.log(req.query)
   const query = req.query
   fetchArticleById(articleId,query)
     .then((article) => {
