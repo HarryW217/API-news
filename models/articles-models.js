@@ -2,19 +2,29 @@ const db = require("../db/connection");
 
 exports.fetchArticleById = (article_id, query) => {
   if (query.hasOwnProperty("comment_count")) {
-    return db.query(`
+    return db
+      .query(
+        `
     SELECT articles.*, 
     COUNT(comments.comment_id)::INT AS comment_count
     FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id
     WHERE comments.article_id = $1
     GROUP BY articles.article_id;
-    `, [article_id])
+    `,
+        [article_id]
+      )
       .then((result) => {
-        const obj = result.rows[0]
-        return obj
-    })
+        if (result.rows.length > 0) {
+          const obj = result.rows[0];
+          return obj;
+        } else {
+           return Promise.reject({
+             status: 404,
+             msg: "Article not found!",
+           });
+        }
+      });
   }
-
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1;`, [article_id])
     .then((result) => {

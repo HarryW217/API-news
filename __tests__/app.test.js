@@ -390,9 +390,25 @@ describe.only("GET /api/articles/:article_id?comment_count", () => {
           created_at: "2020-11-03T09:12:00.000Z",
           article_img_url:
             "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
-          comment_count: 2
+          comment_count: 2,
         };
-        expect(article).toMatchObject(desiredObject)
-      })
-  })
-})
+        expect(article).toMatchObject(desiredObject);
+      });
+  });
+  test("GET:404 returns error message when article does not exist", () => {
+    return request(app)
+      .get("/api/articles/999999?comment_count")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found!");
+      });
+  });
+  test("GET:400 returns error message when bad request (invalid ID) is made", () => {
+    return request(app)
+      .get("/api/articles/notAnId?comment_count")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
+});
