@@ -169,18 +169,18 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
   test("POST:400 responds with error message when article id does not exist", () => {
-     const newComment = {
-       username: "icellusedkars",
-       body: "Hello world",
-     };
-     return request(app)
-       .post("/api/articles/99999/comments")
-       .send(newComment)
-       .expect(400)
-       .then((response) => {
-          expect(response.body.msg).toBe("Invalid input")
-       });
-  })
+    const newComment = {
+      username: "icellusedkars",
+      body: "Hello world",
+    };
+    return request(app)
+      .post("/api/articles/99999/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
+  });
   test("POST:400 responds with error message when article id is invalid", () => {
     const newComment = {
       username: "icellusedkars",
@@ -291,25 +291,25 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("PATCH:400 returns error message when bad request (invalid ID) is made", () => {
-     const articleUpdate = { inc_votes: -5 };
-     return request(app)
-       .patch("/api/articles/notAnId")
-       .send(articleUpdate)
-       .expect(400)
-       .then((response) => {
-         expect(response.body.msg).toBe("Invalid input");
-       });
+    const articleUpdate = { inc_votes: -5 };
+    return request(app)
+      .patch("/api/articles/notAnId")
+      .send(articleUpdate)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid input");
+      });
   });
-   test("PATCH:404 returns error message when article does not exist", () => {
-     const articleUpdate = { inc_votes: -5 };
-     return request(app)
-       .patch("/api/articles/99999")
-       .send(articleUpdate)
-       .expect(404)
-       .then((response) => {
-         expect(response.body.msg).toBe("Article not found!");
-       });
-   });
+  test("PATCH:404 returns error message when article does not exist", () => {
+    const articleUpdate = { inc_votes: -5 };
+    return request(app)
+      .patch("/api/articles/99999")
+      .send(articleUpdate)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Article not found!");
+      });
+  });
   test("PATCH:400 returns error message when request body is missing required fields", () => {
     const articleUpdate = { inc_votes: "Hello" };
     return request(app)
@@ -321,7 +321,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
   test("PATCH:400 returns error message when request body contains invalid data type", () => {
-    const articleUpdate = { };
+    const articleUpdate = {};
     return request(app)
       .patch("/api/articles/3")
       .send(articleUpdate)
@@ -332,23 +332,23 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-
-
-
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
   test("GET:200 responds with an array of user objects", () => {
-       return request(app)
-         .get("/api/users")
-         .expect(200)
-         .then((response) => {
-           const users = response.body.users;
-           expect(users.length).toBe(4);
-           users.forEach((user) => {
-             expect(typeof user).toBe("object");
-             expect(typeof user.username).toBe("string");
-             expect(typeof user.name).toBe("string");
-             expect(typeof user.avatar_url).toBe("string");
-           });
-         });
-  })
-})
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body.users;
+        expect(users.length).toBe(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+});
