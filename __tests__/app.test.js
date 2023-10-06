@@ -331,3 +331,41 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+
+
+
+
+
+describe("GET /api/articles?topic", () => {
+  test("GET:200 returns an array of article objects by the defined topic value", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body;
+        expect(Array.isArray(articles)).toBe(true)
+        expect(articles).toHaveLength(1);
+        articles.forEach((article) => {
+          expect(article.topic).toBe("cats")
+        })
+      })
+  })
+  test("GET:200 returns an array of all article objects if query is omitted", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body;
+        expect(articles).toHaveLength(13);
+      });
+  });
+  test("GET:404 returns an error message when there are no articles of queried topic", () => {
+    return request(app)
+      .get("/api/articles?topic=John")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("No articles of this topic!")
+    })
+  });
+})
