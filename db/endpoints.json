@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": [],
     "exampleResponse": {
       "articles": [
         {
@@ -28,7 +28,7 @@
   },
   "GET /api/articles/:article_id": {
     "desciption:": "serves a single article object by article_id",
-    "queries": ["article_id"],
+    "queries": ["topic","comment_count"],
     "exampleResponse": {
       "title": "Eight pug gifs that remind me of mitch",
       "topic": "mitch",
@@ -62,7 +62,7 @@
   },
   "POST /api/articles/:article_id/comments": {
     "description": "adds a comment to an article by article_id, serving the posted comment object",
-    "queries": ["article_id"],
+    "queries": [],
     "exampleResponse": {
       "username": "icellusedkars",
       "body": "Hello world"
@@ -83,6 +83,6 @@
   },
   "DELETE /api/comments/:comment_id": {
     "description": "deletes a comment by comment_id",
-    "queries": ["comment_id"]
+    "queries": []
   }
 }
