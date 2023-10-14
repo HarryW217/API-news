@@ -12,7 +12,7 @@ If you wish to find out a list of endpoints implemented for this project, provid
 
 ## Hosted Version
 
-Insert Hosted Version Here...
+You can access the hosted version of this API here: https://api-news-zhvd.onrender.com/
 
 ## Instructions
 
