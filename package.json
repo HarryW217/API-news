@@ -27,15 +27,16 @@
     "husky": "^8.0.2",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
-    "pg-format": "^1.0.4",
-    "supertest": "^6.3.3"
+    "pg-format": "^1.0.4"
+ 
   },
   "dependencies": {
     "dotenv": "^16.0.0",
     "fs": "^0.0.1-security",
     "pg": "^8.7.3",
     "promises": "^0.2.5",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "supertest": "^6.3.3"
   },
   "jest": {
     "setupFilesAfterEnv": [
