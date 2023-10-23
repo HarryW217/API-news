@@ -354,7 +354,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe.only("GET /api/articles?topic", () => {
+describe("GET /api/articles?topic", () => {
   test("GET:200 returns an array of article objects by the defined topic value", () => {
     return request(app)
       .get("/api/articles?topic=cats")
