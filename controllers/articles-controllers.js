@@ -6,6 +6,8 @@ const {
   insertComment,
 } = require("../models/articles-models");
 
+const { fetchTopics } = require("../models/topics-models");
+
 exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
   const query = req.query
@@ -30,13 +32,33 @@ exports.getArticleCommentsById = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles()
-    .then((articles) => {
-      res.status(200).send(articles);
-    })
-    .catch((err) => {
-      next(err);
+  const query = req.query;
+  const queryKeys = Object.keys(query);
+  if (queryKeys.length === 0) {
+    fetchArticles(query)
+      .then((articles) => {
+        res.status(200).send(articles);
+      })
+      .catch((err) => {
+        next(err);
+      });
+  } else {
+    fetchTopics().then((topics) => {
+      const topicMatches = topics.filter((topic) => topic.slug === query.topic);
+      if (topicMatches.length > 0) {
+        fetchArticles(query).then((articles) => {
+          res.status(200).send(articles);
+        });
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles found of this topic!",
+        }).catch((err) => {
+          next(err);
+        });
+      }
     });
+  }
 };
 
 exports.postComment = (req, res, next) => {
@@ -51,7 +73,6 @@ exports.postComment = (req, res, next) => {
       next(err);
     });
 };
-
 
 exports.patchArticlesById = (req, res, next) => {
   const articleId = req.params.article_id;
