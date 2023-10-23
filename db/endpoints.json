@@ -28,7 +28,7 @@
   },
   "GET /api/articles/:article_id": {
     "desciption:": "serves a single article object by article_id",
-    "queries": [],
+    "queries": ["comment_count"],
     "exampleResponse": {
       "title": "Eight pug gifs that remind me of mitch",
       "topic": "mitch",
