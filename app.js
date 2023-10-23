@@ -13,6 +13,7 @@ const {
 } = require("./controllers/articles-controllers");
 const { deleteComment } = require("./controllers/comments-controllers");
 
+//cors and express
 app.use(cors());
 
 app.use(express.json());
