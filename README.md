@@ -6,7 +6,7 @@
 
 'API News' is an attempt at coding and deploying a Node API. Its purpose is to allow users to manipulate data for a fictitious news website. This includes Articles, Topics, Users of the website and their Comments.
 
-The database is hosted on Elephant SQL. It has been developed using Test-Driven Development to ensure the error-handling works correctly.
+The database is stored on Elephant SQL and hosted using Render. It has been developed using Test-Driven Development to ensure that error-handling works correctly.
 
 If you wish to find out a list of endpoints implemented for this project, providing valid queries and example responses, navigate to `/api`
 
@@ -18,7 +18,7 @@ You can access the hosted version of this API here: https://api-news-zhvd.onrend
 
 **1. Setting Up**
 
-If you wish to clone this project, open your terminal and navigate to the directory you would like to keep this project in. Once you're there, enter the following command:
+If you'd like to clone this project, open your terminal and navigate to the directory you would like to keep this project in. Once you're there, enter the following command:
 
 ```
 git clone (then paste the repo url here)
@@ -34,11 +34,11 @@ Within each, add PGDATABASE=, and the correct database name for that environment
 - `.env.test`: PGDATABASE=nc_news_test
 - `.env.development`: PGDATABASE=nc_news
 
-Double check that these .env files are .gitignored !
+Double-check that these .env files are .gitignored !
 
 **2. Initialising the Project as a Node Project**
 
-Simply type the following command in your terminal to initialise the project as a Node project
+Simply paste the following command in your terminal to initialise the project as a Node project
 
 ```
 npm init -y
@@ -62,7 +62,7 @@ npm install dotenv ex express fs.promises pg supertest --save
 
 **4. Seeding Local Database**
 
-Navigate to your scripts in the `package.json`. Run the `seed` script to correctly seed the database.
+Navigate to your scripts in the `package.json`. Run the `seed` script to seed the database.
 
 You can verify that the seeding has worked by running the following commands in this order:
 
