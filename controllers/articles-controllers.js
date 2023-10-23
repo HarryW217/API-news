@@ -10,7 +10,8 @@ const { fetchTopics } = require("../models/topics-models");
 
 exports.getArticleById = (req, res, next) => {
   const articleId = req.params.article_id;
-  fetchArticleById(articleId)
+  const query = req.query
+  fetchArticleById(articleId,query)
     .then((article) => {
       res.status(200).send(article);
     })
@@ -76,7 +77,6 @@ exports.postComment = (req, res, next) => {
 exports.patchArticlesById = (req, res, next) => {
   const articleId = req.params.article_id;
   const votesUpdate = req.body.inc_votes;
-
   alterArticleVotesById(articleId, votesUpdate)
     .then((article) => {
       res.status(200).send(article);
