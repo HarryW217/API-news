@@ -71,22 +71,43 @@ exports.fetchArticleCommentsById = (article_id) => {
   );
 };
 
-exports.fetchArticles = () => {
-  return db
-    .query(
-      `
+exports.fetchArticles = (query) => {
+  const baseQuery = `
     SELECT COUNT(comments.article_id)::INT AS comment_count , 
     articles.author, title, articles.article_id, topic,
     articles.created_at, articles.votes, article_img_url FROM articles
     LEFT JOIN comments ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY articles.created_at DESC;
-    `
-    )
-    .then((result) => {
+    `;
+  if (query.hasOwnProperty("topic")) {
+    const finalQuery =
+      baseQuery +
+      `
+     WHERE topic = $1
+     GROUP BY articles.article_id  
+     ORDER BY articles.created_at DESC;
+    `;
+    return db.query(finalQuery, [query.topic]).then((result) => {
+      if (result.rows) {
+        const articlesByTopic = result.rows;
+        return articlesByTopic;
+      } else {
+        return Promise.reject({
+          status: 404,
+          msg: "No articles of this topic!",
+        });
+      }
+    });
+  } else {
+    const finalQuery =
+      baseQuery +
+      `GROUP BY articles.article_id
+     ORDER BY articles.created_at DESC;
+    `;
+    return db.query(finalQuery).then((result) => {
       const articlesArr = result.rows;
       return articlesArr;
     });
+  }
 };
 
 exports.insertComment = (article_id, username, body) => {
@@ -100,15 +121,8 @@ exports.insertComment = (article_id, username, body) => {
       [article_id, username, body]
     )
     .then((result) => {
-      if (result.rows.length > 0) {
-        const comment = result.rows[0];
-        return comment;
-      } else {
-        return Promise.reject({
-          status: 404,
-          msg: "Article not found!",
-        });
-      }
+      const comment = result.rows[0];
+      return comment;
     });
 };
 
