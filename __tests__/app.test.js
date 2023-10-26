@@ -215,6 +215,15 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(commentsArr).toEqual(desiredArr);
       });
   });
+   test("GET:200 responds with an empty array of comment objects for an article's article_id if it has no comments", () => {
+     return request(app)
+       .get("/api/articles/4/comments")
+       .expect(200)
+       .then((response) => {
+         const commentsArr = response.body;
+         expect(commentsArr.length).toBe(0)
+       });
+   });
   test("GET:404 returns error message when article does not exist", () => {
     return request(app)
       .get("/api/articles/99999/comments")
